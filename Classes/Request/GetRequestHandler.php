@@ -5,6 +5,7 @@ namespace Classes\Request;
 
 
 use Classes\Models\Tweet;
+use Classes\Models\TweetList;
 use Classes\Models\User;
 
 class GetRequestHandler extends RequestHandler
@@ -98,9 +99,24 @@ class GetRequestHandler extends RequestHandler
         return $aReturn;
     }
 
+    /**
+     * @param array $aBody
+     * @return \array[][]
+     * @throws \Classes\Exceptions\NoDbConnection
+     * @throws \Classes\Exceptions\ObjectNotLoadedException
+     */
     protected function _getTweets(array $aBody): array
     {
-        return array();
+        $aReturn = ["result" =>
+            [
+                "tweetIds" => []
+            ]
+        ];
+        $oTweetList = new TweetList();
+        if($oTweetList->loadForUserID($aBody["id"],intval($aBody["offset"]))){
+            $aReturn["result"]["tweetIds"] = $oTweetList->getTweetIds();
+        }
+        return $aReturn;
     }
 
     protected function _getComments(array $aBody): array

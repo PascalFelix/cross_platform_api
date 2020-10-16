@@ -7,7 +7,7 @@ use Classes\Helper\dbConnector;
 abstract class BaseModel
 {
     abstract public function getTableName(): string;
-
+    abstract public function getId(): string;
     protected ?dbConnector $_oDB = null;
     protected bool $_bIsLoaded = false;
 

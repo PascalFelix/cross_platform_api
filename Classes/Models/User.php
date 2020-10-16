@@ -54,4 +54,8 @@ class User extends BaseModel
             throw new ObjectNotLoadedException("User object was not loaded yet");
         }
     }
+    public function getId(): string
+    {
+        return $this->ID;
+    }
 }

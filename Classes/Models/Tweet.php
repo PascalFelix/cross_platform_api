@@ -25,4 +25,8 @@ class Tweet extends BaseModel
     {
         return intval($this->Retweets);
     }
+    public function getId(): string
+    {
+        return $this->ID;
+    }
 }
