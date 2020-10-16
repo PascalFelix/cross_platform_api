@@ -5,8 +5,36 @@ class ApiTest
 {
     public function __construct()
     {
+        $this->_getTweetTest();
         $this->_loginTests();
     }
+    protected function _getTweetTest()
+    {
+        echo '<br>';
+        echo ' START get tweet Test';
+        echo '<br>';
+        $aRequest = [
+            "get" => [
+                "type" => "tweet",
+                "id" => "1"
+            ]
+        ];
+        $oApiHelper = new \Classes\Helper\ApiHelper($aRequest);
+        print_r($oApiHelper->getRequestHandler()->execute());
+        echo '<br>';
+        $aRequest = [
+            "get" => [
+                "type" => "tweet",
+                "id" => "-1"
+            ]
+        ];
+        $oApiHelper = new \Classes\Helper\ApiHelper($aRequest);
+        print_r($oApiHelper->getRequestHandler()->execute());
+        echo '<br>';
+        echo ' END get tweet Test';
+        echo '<br>';
+    }
+
     protected function _loginTests()
     {
         echo '<br>';

@@ -4,6 +4,7 @@
 namespace Classes\Request;
 
 
+use Classes\Models\Tweet;
 use Classes\Models\User;
 
 class GetRequestHandler extends RequestHandler
@@ -57,9 +58,9 @@ class GetRequestHandler extends RequestHandler
         ];
         $oUser = new User();
         if ($oUser->loadByName($aBody["username"])) {
-            if ($oUser->passwordsMatch($aBody["password"])){
+            if ($oUser->passwordsMatch($aBody["password"])) {
                 $aReturn["result"]["type"] = 1;
-            }else{
+            } else {
                 $aReturn["result"]["type"] = 2;
             }
         } else {
@@ -69,9 +70,32 @@ class GetRequestHandler extends RequestHandler
         return $aReturn;
     }
 
+    /**
+     * @param array $aBody
+     * @return array[]
+     * @throws \Classes\Exceptions\NoDbConnection
+     * @throws \Exception
+     */
     protected function _getTweet(array $aBody): array
     {
-        return array();
+        $aReturn = ["result" =>
+            [
+                "content" => "",
+                "likes" => 0,
+                "retweets" => 0,
+            ]
+        ];
+
+        $oTweet = new Tweet();
+        if (!$oTweet->load($aBody["id"])) {
+            throw new \Exception("No tweet for this ID");
+        } else {
+            $aReturn["result"]["content"] = $oTweet->getContent();
+            $aReturn["result"]["retweets"] = $oTweet->getRetweetCount();
+            $aReturn["result"]["likes"] = $oTweet->getLikes();
+        }
+
+        return $aReturn;
     }
 
     protected function _getTweets(array $aBody): array
