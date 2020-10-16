@@ -5,10 +5,41 @@ class ApiTest
 {
     public function __construct()
     {
+        $this->_getUserTest();
         $this->_getTweetsTest();
         $this->_getTweetTest();
         $this->_loginTests();
     }
+    protected function _getUserTest()
+    {
+        echo '<br>';
+        echo ' START get user Test';
+        echo '<br>';
+
+        $aRequest = [
+            "get" => [
+                "type" => "user",
+                "id" => "1"
+            ]
+        ];
+        $oApiHelper = new \Classes\Helper\ApiHelper($aRequest);
+        print_r($oApiHelper->getRequestHandler()->execute());
+        echo '<br>';
+
+        $aRequest = [
+            "get" => [
+                "type" => "user",
+                "id" => "-1"
+            ]
+        ];
+        $oApiHelper = new \Classes\Helper\ApiHelper($aRequest);
+        print_r($oApiHelper->getRequestHandler()->execute());
+
+        echo '<br>';
+        echo ' END get user Test';
+        echo '<br>';
+    }
+
     protected function _getTweetTest()
     {
         echo '<br>';

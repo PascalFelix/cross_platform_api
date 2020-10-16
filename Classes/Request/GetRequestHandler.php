@@ -121,12 +121,30 @@ class GetRequestHandler extends RequestHandler
 
     protected function _getComments(array $aBody): array
     {
-        return array();
+        $oEmpty = new EmptyRequest($this->_aRequest);
+        return $oEmpty->execute();
     }
 
+    /**
+     * @param array $aBody
+     * @return \string[][]
+     * @throws \Classes\Exceptions\NoDbConnection
+     */
     protected function _getUser(array $aBody): array
     {
-        return array();
+        $aReturn = ["result" =>
+            [
+                "username" => ""
+            ]
+        ];
+        $oUser = new User();
+        if($oUser->load($aBody["id"])){
+            $aReturn["result"]["username"] = $oUser->getUserName();
+        }else{
+            throw new \Exception("No user for this ID");
+        }
+
+        return $aReturn;
     }
 
 

@@ -44,18 +44,24 @@ class User extends BaseModel
      */
     public function passwordsMatch(string $sPassword): bool
     {
-        if($this->_bIsLoaded){
-            if($this->{'Password'} == $sPassword){
+        if ($this->_bIsLoaded) {
+            if ($this->{'Password'} == $sPassword) {
                 return true;
-            }else{
+            } else {
                 return false;
             }
-        }else{
+        } else {
             throw new ObjectNotLoadedException("User object was not loaded yet");
         }
     }
+
     public function getId(): string
     {
         return $this->ID;
+    }
+
+    public function getUserName(): string
+    {
+        return $this->UserName;
     }
 }
