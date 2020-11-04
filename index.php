@@ -1,17 +1,14 @@
 <?php
 
-echo '<h1>Hello World</h1>';
 include 'loader.php';
-//echo phpinfo ();
+
+$oRequest = new \Classes\Helper\PostRequestHelper();
 
 try {
-    $oTest = new \Classes\Helper\dbConnector();
-    var_dump($oTest->getAsArray("SELECT * FROM user WHERE ID = '2'"));
-    echo '<br>';
-    var_dump($oTest->getAsArray("DESCRIBE user"));
+    $oApiHelper = new \Classes\Helper\ApiHelper($_POST);
+    echo json_encode($oApiHelper->getRequestHandler()->execute());
 
-}catch (\Exception $exception){
-
-    var_dump($exception->getMessage());
+} catch (\Exception $exception) {
+    throw $exception;
 }
 

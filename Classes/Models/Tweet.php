@@ -29,4 +29,12 @@ class Tweet extends BaseModel
     {
         return $this->ID;
     }
+    public function getUserID(): string
+    {
+        return $this->UserID;
+    }
+    public function getTime(): string
+    {
+        return $this->Timestamp;
+    }
 }

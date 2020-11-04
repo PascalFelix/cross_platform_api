@@ -7,9 +7,9 @@ use Classes\Exceptions\NoDbConnection;
 class dbConnector
 {
     protected string $_sDbIp = "localhost";
-    protected string $_sDbUserName = "root";
-    protected string $_sDbPassword = "";
-    protected string $_sDb = "bitter";
+    protected string $_sDbUserName = "pascal";
+    protected string $_sDbPassword = "AdnFpaAgSUx4FLctnMeB";
+    protected string $_sDb = "api";
 
 
     protected ?\mysqli $_oMysqli = null;
@@ -20,7 +20,6 @@ class dbConnector
      */
     public function __construct()
     {
-
         $this->_connect();
         $this->_disconnect();
 

@@ -29,9 +29,9 @@ class ApiHelper
     {
         if (empty($this->_aRequest)) {
             return new EmptyRequest($this->_aRequest);
-        } else if (array_keys($this->_aRequest)[0] == "get") {
+        } else if ($this->_aRequest["method"] == "get") {
             return new GetRequestHandler($this->_aRequest);
-        } else if (array_keys($this->_aRequest)[0] == "put") {
+        } else if ($this->_aRequest["method"] == "put") {
             return new PutRequestHandler($this->_aRequest);
         }
     }

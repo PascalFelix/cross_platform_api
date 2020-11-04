@@ -22,7 +22,7 @@ class GetRequestHandler extends RequestHandler
             /**
              * "tpye" => "$type"
              */
-            $aBody = $this->_aRequest["get"];
+            $aBody = $this->_aRequest;
             switch ($aBody["type"]) {
                 case "user":
                     return $this->_getUser($aBody);
@@ -54,19 +54,23 @@ class GetRequestHandler extends RequestHandler
     {
         $aReturn = ["result" =>
             [
-                "type" => -1
+                "type" => -1,
+                "userid" => ""
             ]
         ];
         $oUser = new User();
         if ($oUser->loadByName($aBody["username"])) {
             if ($oUser->passwordsMatch($aBody["password"])) {
                 $aReturn["result"]["type"] = 1;
+                $aReturn["result"]["userid"] = $oUser->getId();
             } else {
                 $aReturn["result"]["type"] = 2;
+                $aReturn["result"]["userid"] = -1;
             }
         } else {
             //user dose not exist
             $aReturn["result"]["type"] = 3;
+            $aReturn["result"]["userid"] = -1;
         }
         return $aReturn;
     }
@@ -84,6 +88,8 @@ class GetRequestHandler extends RequestHandler
                 "content" => "",
                 "likes" => 0,
                 "retweets" => 0,
+                "timestamp" => 0,
+                "userid" => 0,
             ]
         ];
 
@@ -92,6 +98,8 @@ class GetRequestHandler extends RequestHandler
             throw new \Exception("No tweet for this ID");
         } else {
             $aReturn["result"]["content"] = $oTweet->getContent();
+            $aReturn["result"]["userid"] = $oTweet->getUserID();
+            $aReturn["result"]["timestamp"] = $oTweet->getTime();
             $aReturn["result"]["retweets"] = $oTweet->getRetweetCount();
             $aReturn["result"]["likes"] = $oTweet->getLikes();
         }
@@ -134,12 +142,18 @@ class GetRequestHandler extends RequestHandler
     {
         $aReturn = ["result" =>
             [
-                "username" => ""
+                "username" => "",
+                "follower" => "",
+                "tweets" => "",
+                "follows" => ""
             ]
         ];
         $oUser = new User();
         if($oUser->load($aBody["id"])){
             $aReturn["result"]["username"] = $oUser->getUserName();
+            $aReturn["result"]["follower"] = $oUser->getFollowerCount();
+            $aReturn["result"]["follows"] = $oUser->getFollowsCount();
+            $aReturn["result"]["tweets"] = $oUser->getTweetCount();
         }else{
             throw new \Exception("No user for this ID");
         }

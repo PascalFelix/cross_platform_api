@@ -64,4 +64,22 @@ class User extends BaseModel
     {
         return $this->UserName;
     }
+    public function getFollowerCount(): string
+    {
+        return $this->Follower;
+    }
+    public function getFollowsCount(): string
+    {
+        return $this->Follows;
+    }
+    public function getTweetCount():string
+    {
+        $sSelect = "
+        SELECT count(*) as counter
+        FROM tweets v
+        WHERE v.UserID = '".$this->getId()."'
+        ";
+        $var = $this->_oDB->getAsArray($sSelect);
+        return strval($var[0]['counter']);
+    }
 }

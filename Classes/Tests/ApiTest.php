@@ -1,15 +1,18 @@
 <?php
+
 namespace Classes\Tests;
 
 class ApiTest
 {
     public function __construct()
     {
+
         $this->_getUserTest();
-        $this->_getTweetsTest();
-        $this->_getTweetTest();
-        $this->_loginTests();
+////        $this->_getTweetsTest();
+////        $this->_getTweetTest();
+////        $this->_loginTests();
     }
+
     protected function _getUserTest()
     {
         echo '<br>';
@@ -17,23 +20,23 @@ class ApiTest
         echo '<br>';
 
         $aRequest = [
-            "get" => [
-                "type" => "user",
-                "id" => "1"
-            ]
+            "method" => "get",
+            "type" => "user",
+            "id" => "1"
+
         ];
         $oApiHelper = new \Classes\Helper\ApiHelper($aRequest);
         print_r($oApiHelper->getRequestHandler()->execute());
         echo '<br>';
 
-        $aRequest = [
-            "get" => [
-                "type" => "user",
-                "id" => "-1"
-            ]
-        ];
-        $oApiHelper = new \Classes\Helper\ApiHelper($aRequest);
-        print_r($oApiHelper->getRequestHandler()->execute());
+//        $aRequest = [
+//            "method" => "get",
+//            "type" => "user",
+//            "id" => "-1"
+//
+//        ];
+//        $oApiHelper = new \Classes\Helper\ApiHelper($aRequest);
+//        print_r($oApiHelper->getRequestHandler()->execute());
 
         echo '<br>';
         echo ' END get user Test';
