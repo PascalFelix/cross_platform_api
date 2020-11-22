@@ -13,7 +13,7 @@ class TweetList
     protected bool $_bIsLoaded = false;
 
 
-    protected int $_iMaxLoadCount = 5;
+    protected int $_iMaxLoadCount = 10;
     protected array $_aTweets = array();
 
     public function __construct()

@@ -6,11 +6,55 @@ class ApiTest
 {
     public function __construct()
     {
-
-        $this->_getUserTest();
+        $this->_putTweetTest();
+            //$this->_getFeedTest();
+//        $this->_getUserTest();
 ////        $this->_getTweetsTest();
 ////        $this->_getTweetTest();
 ////        $this->_loginTests();
+    }
+
+    protected function _putTweetTest()
+    {
+        echo '<br>';
+        echo ' START put teet';
+        echo '<br>';
+        $aRequest = [
+            "method" => "put",
+            "type" => "tweet",
+            "username" => "Test",
+            "password" => "123",
+            "tweet" => "HALLO"
+
+        ];
+        $oApiHelper = new \Classes\Helper\ApiHelper($aRequest);
+        print_r($oApiHelper->getRequestHandler()->execute());
+        echo '<br>';
+        echo ' end put teet';
+        echo '<br>';
+    }
+
+    protected function _getFeedTest()
+    {
+        echo '<br>';
+        echo ' START get feed';
+        echo '<br>';
+        $aRequest = [
+            "method" => "get",
+            "type" => "feed",
+            "username" => "Test",
+            "password" => "123",
+            "offset" => 0
+
+        ];
+        $oApiHelper = new \Classes\Helper\ApiHelper($aRequest);
+        print_r($oApiHelper->getRequestHandler()->execute());
+        echo '<br>';
+        echo '<br>';
+        echo ' END get feed';
+        echo '<br>';
+
+
     }
 
     protected function _getUserTest()

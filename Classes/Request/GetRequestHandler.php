@@ -4,6 +4,7 @@
 namespace Classes\Request;
 
 
+use Classes\Models\Feed;
 use Classes\Models\Tweet;
 use Classes\Models\TweetList;
 use Classes\Models\User;
@@ -34,6 +35,8 @@ class GetRequestHandler extends RequestHandler
                     return $this->_getLogin($aBody);
                 case "comments":
                     return $this->_getComments($aBody);
+                case "feed":
+                    return $this->_getFeed($aBody);
                 default:
                     $oEmpty = new EmptyRequest($this->_aRequest);
                     return $oEmpty->execute();
@@ -42,6 +45,29 @@ class GetRequestHandler extends RequestHandler
             $oEmpty = new EmptyRequest($this->_aRequest);
             return $oEmpty->execute();
         }
+    }
+
+    /**
+     * @param array $aBody
+     * @return \array[][]
+     * @throws \Classes\Exceptions\NoDbConnection
+     * @throws \Classes\Exceptions\ObjectNotLoadedException
+     * @throws \Classes\Exceptions\UserPasswordNotMatch
+     */
+    protected function _getFeed(array $aBody): array
+    {
+        $aReturn = ["result" =>
+            [
+                "tweetIDs" => []
+            ]
+        ];
+        try {
+            $oFeed = new Feed();
+            $aReturn["result"]["tweetIDs"] = $oFeed->loadFeed($aBody["username"], $aBody["password"], $aBody["offset"]);
+        } catch (\Exception $exception) {
+
+        }
+        return $aReturn;
     }
 
     /**
@@ -102,6 +128,7 @@ class GetRequestHandler extends RequestHandler
             $aReturn["result"]["timestamp"] = $oTweet->getTime();
             $aReturn["result"]["retweets"] = $oTweet->getRetweetCount();
             $aReturn["result"]["likes"] = $oTweet->getLikes();
+            $aReturn["result"]["userlikedtweet"] = $oTweet->userLikedTweet($aBody["userid"]);
         }
 
         return $aReturn;
@@ -121,7 +148,7 @@ class GetRequestHandler extends RequestHandler
             ]
         ];
         $oTweetList = new TweetList();
-        if($oTweetList->loadForUserID($aBody["id"],intval($aBody["offset"]))){
+        if ($oTweetList->loadForUserID($aBody["id"], intval($aBody["offset"]))) {
             $aReturn["result"]["tweetIds"] = $oTweetList->getTweetIds();
         }
         return $aReturn;
@@ -149,12 +176,12 @@ class GetRequestHandler extends RequestHandler
             ]
         ];
         $oUser = new User();
-        if($oUser->load($aBody["id"])){
+        if ($oUser->load($aBody["id"])) {
             $aReturn["result"]["username"] = $oUser->getUserName();
             $aReturn["result"]["follower"] = $oUser->getFollowerCount();
             $aReturn["result"]["follows"] = $oUser->getFollowsCount();
             $aReturn["result"]["tweets"] = $oUser->getTweetCount();
-        }else{
+        } else {
             throw new \Exception("No user for this ID");
         }
 
