@@ -64,22 +64,47 @@ class User extends BaseModel
     {
         return $this->UserName;
     }
+
     public function getFollowerCount(): string
     {
         return $this->Follower;
     }
+
     public function getFollowsCount(): string
     {
         return $this->Follows;
     }
-    public function getTweetCount():string
+
+    public function getTweetCount(): string
     {
         $sSelect = "
         SELECT count(*) as counter
         FROM tweets v
-        WHERE v.UserID = '".$this->getId()."'
+        WHERE v.UserID = '" . $this->getId() . "'
         ";
         $var = $this->_oDB->getAsArray($sSelect);
         return strval($var[0]['counter']);
     }
+
+    public function isUserNameTaken(string $sUsername): bool
+    {
+        $sSelect = "
+        SELECT count(*) as counter
+        FROM user v
+        WHERE v.UserName = '" . $sUsername . "'
+        ";
+        $var = $this->_oDB->getAsArray($sSelect);
+        return intval(strval($var[0]['counter'])) == 0 ? false : true;
+    }
+
+    public function registerUser(string $sUsername, string $sPassword): bool
+    {
+        $sINSERT = "
+                 INSERT INTO " . $this->getTableName() . " (UserName, Password)
+                 VALUES ('" . $sUsername . "','" . $sPassword . "');
+                 ";
+        return $this->_oDB->execute($sINSERT);
+    }
+
+
 }

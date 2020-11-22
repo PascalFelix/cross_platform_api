@@ -40,11 +40,12 @@ class Feed
                 "
                 SELECT v.ID
                 FROM tweets v
-                INNER JOIN user2user u2u ON u2u.UserID = '1'
+                INNER JOIN user2user u2u ON u2u.UserID = '".$this->_oUser->getId()."'
                 WHERE v.UserID = u2u.UserID OR v.UserID IN (u2u.UserToFollowID)
                 ORDER BY v.Timestamp desc
                 LIMIT " . $this->_iMaxLoadCount . " OFFSET " . $iOffset . "
                 ";
+            apilog($sSelect);
             $aResult = $this->_oDB->getAsArray($sSelect);
             foreach ($aResult as $iKey => $aRow) {
                 $aReturn[] = $aRow['ID'];

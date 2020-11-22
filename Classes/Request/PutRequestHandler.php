@@ -28,6 +28,8 @@ class PutRequestHandler extends RequestHandler
                     return $this->_tweet($aBody);
                 case "like":
                     return $this->_like($aBody);
+                case "registeruser":
+                    return $this->_registerUser($aBody);
                 default:
                     $oEmpty = new EmptyRequest($this->_aRequest);
                     return $oEmpty->execute();
@@ -37,6 +39,25 @@ class PutRequestHandler extends RequestHandler
             return $oEmpty->execute();
         }
     }
+
+    protected function _registerUser(array $aBody):array
+    {
+        apilog("_registerUser");
+        $aReturn = ["result" =>
+            [
+                "status" => false
+            ]
+        ];
+        apilog($aBody);
+        try {
+            $oUser = new User();
+            $aReturn["result"]["status"] = $oUser->registerUser($aBody["username"], $aBody["password"]);
+        } catch (\Exception $exception) {
+
+        }
+        return $aReturn;
+    }
+
     protected function _like(array $aBody): array
     {
         $aReturn = ["result" =>

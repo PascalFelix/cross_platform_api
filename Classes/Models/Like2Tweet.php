@@ -64,9 +64,7 @@ class Like2Tweet extends BaseModel
         FROM " . $this->getTableName() . " t
         WHERE t.UserID = '" . $oUser->getId() . "' and t.TweetID = '".$sTweetID."'
         ";
-        apilog($sSELECT);
         $aResult = $this->_oDB->getAsArray($sSELECT);
-        apilog($aResult);
         if (empty($aResult)) {
             return $this->load("-1");
         } else {

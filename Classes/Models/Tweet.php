@@ -60,14 +60,13 @@ class Tweet extends BaseModel
     }
 
     /**
-     * @param string $sUserID
+     * @param string|null $sUserID
      * @return bool
      * @throws \Classes\Exceptions\NoDbConnection
      */
-    public function userLikedTweet(string $sUserID): bool
+    public function userLikedTweet(?string $sUserID): bool
     {
         if(!empty($sUserID)){
-            apilog($sUserID);
             $oTemp = new Like2Tweet();
             $oUser = new User();
             $oUser->load($sUserID);

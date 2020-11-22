@@ -37,6 +37,8 @@ class GetRequestHandler extends RequestHandler
                     return $this->_getComments($aBody);
                 case "feed":
                     return $this->_getFeed($aBody);
+                case "usernametaken":
+                    return $this->_isUsernameTaken($aBody);
                 default:
                     $oEmpty = new EmptyRequest($this->_aRequest);
                     return $oEmpty->execute();
@@ -45,6 +47,22 @@ class GetRequestHandler extends RequestHandler
             $oEmpty = new EmptyRequest($this->_aRequest);
             return $oEmpty->execute();
         }
+    }
+
+    protected function _isUsernameTaken(array $aBody): array
+    {
+        $aReturn = ["result" =>
+            [
+                "taken" => true
+            ]
+        ];
+        try {
+            $oFeed = new User();
+            $aReturn["result"]["taken"] = $oFeed->isUserNameTaken($aBody["username"]);
+        } catch (\Exception $exception) {
+
+        }
+        return $aReturn;
     }
 
     /**

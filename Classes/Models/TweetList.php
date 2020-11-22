@@ -33,6 +33,7 @@ class TweetList
         SELECT t.ID
         FROM tweets t
         WHERE t.UserID = '" . $sId . "'
+        ORDER BY t.Timestamp desc
         LIMIT " . $this->_iMaxLoadCount . " OFFSET " . $iOffset . "
         ";
 
