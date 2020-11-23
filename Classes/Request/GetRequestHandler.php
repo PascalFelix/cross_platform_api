@@ -8,6 +8,7 @@ use Classes\Models\Feed;
 use Classes\Models\Tweet;
 use Classes\Models\TweetList;
 use Classes\Models\User;
+use Classes\Models\user2user;
 
 class GetRequestHandler extends RequestHandler
 {
@@ -39,6 +40,8 @@ class GetRequestHandler extends RequestHandler
                     return $this->_getFeed($aBody);
                 case "usernametaken":
                     return $this->_isUsernameTaken($aBody);
+                case "userlist":
+                    return $this->_getUserlist($aBody);
                 default:
                     $oEmpty = new EmptyRequest($this->_aRequest);
                     return $oEmpty->execute();
@@ -49,6 +52,31 @@ class GetRequestHandler extends RequestHandler
         }
     }
 
+    /**
+     * @param array $aBody
+     * @return \array[][]
+     */
+    protected function _getUserlist(array $aBody): array
+    {
+        $aReturn = ["result" =>
+            [
+                "userids" => []
+            ]
+        ];
+        try {
+            $oUser = new User();
+            $aReturn["result"]["userids"] = $oUser->getUserList();
+        } catch (\Exception $exception) {
+
+        }
+        return $aReturn;
+    }
+
+
+    /**
+     * @param array $aBody
+     * @return \bool[][]
+     */
     protected function _isUsernameTaken(array $aBody): array
     {
         $aReturn = ["result" =>
@@ -190,15 +218,24 @@ class GetRequestHandler extends RequestHandler
                 "username" => "",
                 "follower" => "",
                 "tweets" => "",
-                "follows" => ""
+                "follows" => "",
+                "currentuserfollows" => false
             ]
         ];
         $oUser = new User();
+
+        $oUser2User = new user2user();
         if ($oUser->load($aBody["id"])) {
             $aReturn["result"]["username"] = $oUser->getUserName();
             $aReturn["result"]["follower"] = $oUser->getFollowerCount();
             $aReturn["result"]["follows"] = $oUser->getFollowsCount();
             $aReturn["result"]["tweets"] = $oUser->getTweetCount();
+
+            if(!empty($aBody['currentuserid'])){
+                $oCurrentUser = new User();
+                $oCurrentUser->load($aBody['currentuserid']);
+                $aReturn["result"]["currentuserfollows"] = $oUser2User->userAlreadyFollowsUser($oCurrentUser,$oUser);
+            }
         } else {
             throw new \Exception("No user for this ID");
         }

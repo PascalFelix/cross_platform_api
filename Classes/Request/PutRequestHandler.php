@@ -30,6 +30,8 @@ class PutRequestHandler extends RequestHandler
                     return $this->_like($aBody);
                 case "registeruser":
                     return $this->_registerUser($aBody);
+                case "togglefollow":
+                    return $this->_toggleFollow($aBody);
                 default:
                     $oEmpty = new EmptyRequest($this->_aRequest);
                     return $oEmpty->execute();
@@ -40,15 +42,32 @@ class PutRequestHandler extends RequestHandler
         }
     }
 
-    protected function _registerUser(array $aBody):array
+    protected function _toggleFollow(array $aBody):array
     {
-        apilog("_registerUser");
         $aReturn = ["result" =>
             [
                 "status" => false
             ]
         ];
-        apilog($aBody);
+        try {
+            $oUser = new User();
+            $oUser->load($aBody["userid"]);
+            $oTargetUser = new User();
+            $oTargetUser->load($aBody["targetuserid"]);
+            $aReturn["result"]["status"] = $oUser->toggleFollow($oTargetUser,$aBody["password"]);
+        } catch (\Exception $exception) {
+
+        }
+        return $aReturn;
+    }
+
+    protected function _registerUser(array $aBody):array
+    {
+        $aReturn = ["result" =>
+            [
+                "status" => false
+            ]
+        ];
         try {
             $oUser = new User();
             $aReturn["result"]["status"] = $oUser->registerUser($aBody["username"], $aBody["password"]);

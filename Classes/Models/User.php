@@ -106,5 +106,37 @@ class User extends BaseModel
         return $this->_oDB->execute($sINSERT);
     }
 
+    /**
+     * @return array
+     * @throws \Classes\Exceptions\NoDbConnection
+     */
+    public function getUserlist(): array
+    {
+        $sSelect = "
+        SELECT u.ID
+        FROM user u
+        ";
+        $var = $this->_oDB->getAsArray($sSelect);
+
+        $aReturn = [];
+        foreach ($var as $key => $aRow) {
+            $aReturn[] = $aRow['ID'];
+        }
+        return $aReturn;
+    }
+
+    /**
+     * @param User $oTargetUser
+     * @param string $sPassword
+     * @return bool
+     * @throws ObjectNotLoadedException
+     * @throws \Classes\Exceptions\NoDbConnection
+     * @throws \Classes\Exceptions\UserPasswordNotMatch
+     */
+    public function toggleFollow(User $oTargetUser, string $sPassword): bool
+    {
+        $oObject = new user2user();
+        return $oObject->toggleFollow($this, $sPassword, $oTargetUser);
+    }
 
 }
