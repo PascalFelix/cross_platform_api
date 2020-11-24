@@ -23,15 +23,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="03760c40-de08-4d2b-ba61-1461495bf3a5" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/Classes/Models/Comment.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Classes/Models/CommentList.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Classes/Models/Like2Comment.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/config.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.htaccess" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Classes/Helper/dbConnector.php" beforeDir="false" afterPath="$PROJECT_DIR$/Classes/Helper/dbConnector.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Classes/Models/Like2Tweet.php" beforeDir="false" afterPath="$PROJECT_DIR$/Classes/Models/Like2Tweet.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Classes/Request/GetRequestHandler.php" beforeDir="false" afterPath="$PROJECT_DIR$/Classes/Request/GetRequestHandler.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Classes/Request/PutRequestHandler.php" beforeDir="false" afterPath="$PROJECT_DIR$/Classes/Request/PutRequestHandler.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/loader.php" beforeDir="false" afterPath="$PROJECT_DIR$/loader.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -84,7 +78,7 @@
       <workItem from="1605744197084" duration="6017000" />
       <workItem from="1606023302566" duration="8260000" />
       <workItem from="1606083234846" duration="6597000" />
-      <workItem from="1606201469822" duration="8686000" />
+      <workItem from="1606201469822" duration="9126000" />
     </task>
     <servers />
   </component>
@@ -120,6 +114,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="552" y="178" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1602807016776" />
+    <state x="722" y="322" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1606216078950">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="722" y="322" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1606216078950" />
     <state x="751" y="222" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1602810174871">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -140,6 +138,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="794" y="443" key="NewPhpFileDialog/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1606215558319" />
+    <state x="815" y="222" key="RollbackChangesDialog" timestamp="1606215784485">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="815" y="222" key="RollbackChangesDialog/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1606215784485" />
     <state x="297" y="205" key="SettingsEditor" timestamp="1605747562347">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>

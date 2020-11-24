@@ -1,5 +1,5 @@
 <?php
-
+require_once 'config.php';
 function exception_handler($exception)
 {
     wh_log($exception, 'errors');
