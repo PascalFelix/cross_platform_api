@@ -4,6 +4,8 @@
 namespace Classes\Request;
 
 
+use Classes\Models\Comment;
+use Classes\Models\CommentList;
 use Classes\Models\Feed;
 use Classes\Models\Tweet;
 use Classes\Models\TweetList;
@@ -34,14 +36,16 @@ class GetRequestHandler extends RequestHandler
                     return $this->_getTweets($aBody);
                 case "login":
                     return $this->_getLogin($aBody);
-                case "comments":
-                    return $this->_getComments($aBody);
                 case "feed":
                     return $this->_getFeed($aBody);
                 case "usernametaken":
                     return $this->_isUsernameTaken($aBody);
                 case "userlist":
                     return $this->_getUserlist($aBody);
+                case "comment":
+                    return $this->_getComment($aBody);
+                case "comments":
+                    return $this->_getComments($aBody);
                 default:
                     $oEmpty = new EmptyRequest($this->_aRequest);
                     return $oEmpty->execute();
@@ -50,6 +54,49 @@ class GetRequestHandler extends RequestHandler
             $oEmpty = new EmptyRequest($this->_aRequest);
             return $oEmpty->execute();
         }
+    }
+
+    protected function _getComments(array $aBody): array
+    {
+        $aReturn = ["result" =>
+            [
+                "commentids" => []
+            ]
+        ];
+        try {
+            $oCommentList = new CommentList();
+            $oCommentList->loadForTweetID($aBody["tweetid"], $aBody["offset"]);
+            $aReturn["result"]["commentids"] = $oCommentList->getCommentIds();
+        } catch (\Exception $exception) {
+
+        }
+        return $aReturn;
+    }
+
+    protected function _getComment(array $aBody): array
+    {
+        $aReturn = ["result" =>
+            [
+                "content" => "",
+                "likes" => 0,
+                "retweets" => 0,
+                "timestamp" => 0,
+                "tweetid" => 0,
+                "userlikedcomment" => false
+            ]
+        ];
+        try {
+            $oComment = new Comment();
+            $oComment->load($aBody["commentid"]);
+            $aReturn["result"]["commentid"] = $oComment->getId();
+            $aReturn["result"]["content"] = $oComment->getContent();
+            $aReturn["result"]["userlikedcomment"] = $oComment->userLikedComment($aBody["userid"]);
+            $aReturn["result"]["tweetid"] = $oComment->getTweetID();
+            $aReturn["result"]["timestamp"] = $oComment->getTimestamp();
+        } catch (\Exception $exception) {
+
+        }
+        return $aReturn;
     }
 
     /**
@@ -162,6 +209,7 @@ class GetRequestHandler extends RequestHandler
                 "retweets" => 0,
                 "timestamp" => 0,
                 "userid" => 0,
+                "userlikedtweet" => false
             ]
         ];
 
@@ -200,12 +248,6 @@ class GetRequestHandler extends RequestHandler
         return $aReturn;
     }
 
-    protected function _getComments(array $aBody): array
-    {
-        $oEmpty = new EmptyRequest($this->_aRequest);
-        return $oEmpty->execute();
-    }
-
     /**
      * @param array $aBody
      * @return \string[][]
@@ -231,10 +273,10 @@ class GetRequestHandler extends RequestHandler
             $aReturn["result"]["follows"] = $oUser->getFollowsCount();
             $aReturn["result"]["tweets"] = $oUser->getTweetCount();
 
-            if(!empty($aBody['currentuserid'])){
+            if (!empty($aBody['currentuserid'])) {
                 $oCurrentUser = new User();
                 $oCurrentUser->load($aBody['currentuserid']);
-                $aReturn["result"]["currentuserfollows"] = $oUser2User->userAlreadyFollowsUser($oCurrentUser,$oUser);
+                $aReturn["result"]["currentuserfollows"] = $oUser2User->userAlreadyFollowsUser($oCurrentUser, $oUser);
             }
         } else {
             throw new \Exception("No user for this ID");

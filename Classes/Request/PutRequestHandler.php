@@ -4,7 +4,9 @@
 namespace Classes\Request;
 
 
+use Classes\Models\Comment;
 use Classes\Models\Feed;
+use Classes\Models\Like2Comment;
 use Classes\Models\Like2Tweet;
 use Classes\Models\Tweet;
 use Classes\Models\User;
@@ -32,6 +34,10 @@ class PutRequestHandler extends RequestHandler
                     return $this->_registerUser($aBody);
                 case "togglefollow":
                     return $this->_toggleFollow($aBody);
+                case "likecomment":
+                    return $this->_likeComment($aBody);
+                case "putcomment":
+                    return $this->_putComment($aBody);
                 default:
                     $oEmpty = new EmptyRequest($this->_aRequest);
                     return $oEmpty->execute();
@@ -40,6 +46,42 @@ class PutRequestHandler extends RequestHandler
             $oEmpty = new EmptyRequest($this->_aRequest);
             return $oEmpty->execute();
         }
+    }
+
+    protected function _putComment(array $aBody): array
+    {
+        $aReturn = ["result" =>
+            [
+                "status" => false
+            ]
+        ];
+        try {
+            $oComment = new Comment();
+            $oUser = new User();
+            $oUser->load($aBody["userid"]);
+            $aReturn["result"]["status"] = $oComment->comment($oUser, $aBody["password"], $aBody["tweetid"] ,$aBody["content"]);
+        } catch (\Exception $exception) {
+
+        }
+        return $aReturn;
+    }
+
+    protected function _likeComment(array $aBody): array
+    {
+        $aReturn = ["result" =>
+            [
+                "status" => false
+            ]
+        ];
+        try {
+            $oLike2Tweet = new Like2Comment();
+            $oUser = new User();
+            $oUser->loadByName($aBody["username"]);
+            $aReturn["result"]["status"] = $oLike2Tweet->toggleLike($oUser, $aBody["password"], $aBody["commentid"]);
+        } catch (\Exception $exception) {
+
+        }
+        return $aReturn;
     }
 
     protected function _toggleFollow(array $aBody):array

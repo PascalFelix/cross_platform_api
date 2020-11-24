@@ -6,10 +6,10 @@ use Classes\Exceptions\NoDbConnection;
 
 class dbConnector
 {
-    protected string $_sDbIp = "localhost";
-    protected string $_sDbUserName = "pascal";
-    protected string $_sDbPassword = "AdnFpaAgSUx4FLctnMeB";
-    protected string $_sDb = "api";
+    protected string $_sDbIp = dbip;
+    protected string $_sDbUserName = user;
+    protected string $_sDbPassword = password;
+    protected string $_sDb = dbname;
 
 
     protected ?\mysqli $_oMysqli = null;
