@@ -76,7 +76,7 @@ class PutRequestHandler extends RequestHandler
         try {
             $oLike2Tweet = new Like2Comment();
             $oUser = new User();
-            $oUser->loadByName($aBody["username"]);
+            $oUser->load($aBody["userid"]);
             $aReturn["result"]["status"] = $oLike2Tweet->toggleLike($oUser, $aBody["password"], $aBody["commentid"]);
         } catch (\Exception $exception) {
 
@@ -121,15 +121,17 @@ class PutRequestHandler extends RequestHandler
 
     protected function _like(array $aBody): array
     {
+        apilog("_like");
         $aReturn = ["result" =>
             [
                 "status" => false
             ]
         ];
         try {
+            apilog($aBody);
             $oLike2Tweet = new Like2Tweet();
             $oUser = new User();
-            $oUser->loadByName($aBody["username"]);
+            $oUser->load($aBody["userid"]);
             $aReturn["result"]["status"] = $oLike2Tweet->toggleLike($oUser, $aBody["password"], $aBody["tweetid"]);
         } catch (\Exception $exception) {
 
@@ -147,7 +149,7 @@ class PutRequestHandler extends RequestHandler
         try {
             $oTweet = new Tweet();
             $oUser = new User();
-            $oUser->loadByName($aBody["username"]);
+            $oUser->load($aBody["userid"]);
             $aReturn["result"]["status"] = $oTweet->tweet($oUser, $aBody["password"], $aBody["tweet"]);
         } catch (\Exception $exception) {
 

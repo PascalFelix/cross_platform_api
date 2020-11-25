@@ -81,6 +81,7 @@ class GetRequestHandler extends RequestHandler
                 "likes" => 0,
                 "retweets" => 0,
                 "timestamp" => 0,
+                "userid" => 0,
                 "tweetid" => 0,
                 "userlikedcomment" => false
             ]
@@ -90,6 +91,7 @@ class GetRequestHandler extends RequestHandler
             $oComment->load($aBody["commentid"]);
             $aReturn["result"]["commentid"] = $oComment->getId();
             $aReturn["result"]["content"] = $oComment->getContent();
+            $aReturn["result"]["userid"] = $oComment->getUserID();
             $aReturn["result"]["userlikedcomment"] = $oComment->userLikedComment($aBody["userid"]);
             $aReturn["result"]["tweetid"] = $oComment->getTweetID();
             $aReturn["result"]["timestamp"] = $oComment->getTimestamp();
@@ -156,7 +158,7 @@ class GetRequestHandler extends RequestHandler
         ];
         try {
             $oFeed = new Feed();
-            $aReturn["result"]["tweetIDs"] = $oFeed->loadFeed($aBody["username"], $aBody["password"], $aBody["offset"]);
+            $aReturn["result"]["tweetIDs"] = $oFeed->loadFeed($aBody["userid"], $aBody["password"], $aBody["offset"]);
         } catch (\Exception $exception) {
 
         }

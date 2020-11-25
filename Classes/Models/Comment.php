@@ -29,6 +29,10 @@ class Comment extends BaseModel
     {
         return $this->Timestamp;
     }
+    public function getUserID(): string
+    {
+        return $this->UserID;
+    }
     /**
      * @param string|null $sUserID
      * @return bool
@@ -47,10 +51,9 @@ class Comment extends BaseModel
             throw new UserPasswordNotMatch($oUser->getUserName());
         }else{
             $sINSERT = "
-         INSERT INTO comments (Content ,TweetID)
-         VALUES ('".$sComment."',".$sTweetID.");
+         INSERT INTO comments (Content ,TweetID,UserID)
+         VALUES ('".$sComment."',".$sTweetID.",".intval($oUser->getId()).");
          ";
-            apilog($sINSERT);
             return $this->_oDB->execute($sINSERT);
         }
     }
