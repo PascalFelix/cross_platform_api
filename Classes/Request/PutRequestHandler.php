@@ -121,14 +121,12 @@ class PutRequestHandler extends RequestHandler
 
     protected function _like(array $aBody): array
     {
-        apilog("_like");
         $aReturn = ["result" =>
             [
                 "status" => false
             ]
         ];
         try {
-            apilog($aBody);
             $oLike2Tweet = new Like2Tweet();
             $oUser = new User();
             $oUser->load($aBody["userid"]);

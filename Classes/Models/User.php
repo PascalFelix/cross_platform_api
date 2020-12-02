@@ -9,6 +9,8 @@ use Classes\Exceptions\ObjectNotLoadedException;
 class User extends BaseModel
 {
 
+    private bool $_realced = false;
+
     /**
      * @return string
      */
@@ -65,25 +67,95 @@ class User extends BaseModel
         return $this->UserName;
     }
 
+    /**
+     * @return string
+     * @throws \Classes\Exceptions\NoDbConnection
+     */
     public function getFollowerCount(): string
     {
+        $this->_recalc();
         return $this->Follower;
     }
 
+    /**
+     * @return string
+     * @throws \Classes\Exceptions\NoDbConnection
+     */
     public function getFollowsCount(): string
     {
+        $this->_recalc();
         return $this->Follows;
+    }
+
+    /**
+     * @return string
+     * @throws \Classes\Exceptions\NoDbConnection
+     */
+    private function _recalc()
+    {
+        if(!$this->_realced) {
+            $this->_realced = true;
+            $sWorkID = md5(uniqid());
+            $sUpdate = "
+        UPDATE user
+        SET workID = '" . $sWorkID . "'
+        WHERE user.workID = '' AND TIMESTAMPDIFF(MINUTE, user.Timestamp,CURRENT_TIMESTAMP()) > 1 AND user.ID = '" . $this->getId() . "'
+        ";
+            $this->_oDB->execute($sUpdate);
+            $sSelect = "
+        SELECT COUNT(*) AS counter
+        FROM user u
+        WHERE u.workID = '" . $sWorkID . "' 
+        ";
+            $var = $this->_oDB->getAsArray($sSelect);
+            if (intval($var[0]['counter']) === 1) {
+                //recalc
+                $this->_oDB->execute("START TRANSACTION");
+                $sCounters = "
+            #follows
+            SELECT COUNT(*) AS counter
+            FROM user2user u2u1
+            WHERE u2u1.UserID = '" . $this->getId() . "'
+            
+            UNION ALL
+            #follower
+            SELECT COUNT(*)AS counter 
+            FROM user2user u2u2
+            WHERE u2u2.UserToFollowID = '" . $this->getId() . "'
+            
+            UNION ALL 
+              #tweet count
+            SELECT COUNT(*) AS counter
+            FROM tweets t
+            WHERE t.UserID = '" . $this->getId() . "'
+            
+            ";
+                $aCounters = $this->_oDB->getAsArray($sCounters);
+                $sUpdateCounter = "
+            UPDATE user
+            SET 
+            user.Follower = " . $aCounters[1]['counter'] . ",
+            user.Follows = " . $aCounters[0]['counter'] . ",
+            user.Tweets = " . $aCounters[2]['counter'] . "
+            WHERE user.ID = '" . $this->getId() . "'
+            ";
+                $this->_oDB->execute($sUpdateCounter);
+                $sResetWorkID = "
+            UPDATE user
+            SET workID = ''
+            WHERE user.workID = '" . $sWorkID . "' 
+            ";
+                $this->_oDB->execute($sResetWorkID);
+                $this->_oDB->execute("COMMIT");
+            }
+            $this->load($this->getId());
+        }
     }
 
     public function getTweetCount(): string
     {
-        $sSelect = "
-        SELECT count(*) as counter
-        FROM tweets v
-        WHERE v.UserID = '" . $this->getId() . "'
-        ";
-        $var = $this->_oDB->getAsArray($sSelect);
-        return strval($var[0]['counter']);
+        $this->_recalc();
+        return $this->Tweets;
     }
 
     public function isUserNameTaken(string $sUsername): bool

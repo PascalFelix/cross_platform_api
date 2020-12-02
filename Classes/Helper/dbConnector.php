@@ -22,7 +22,7 @@ class dbConnector
     {
         $this->_connect();
         $this->_disconnect();
-
+        $this->_connect();
     }
 
     /**
@@ -32,10 +32,8 @@ class dbConnector
      */
     public function getAsArray(string $sSelect): array
     {
-        $this->_connect();
         $mResult = $this->_oMysqli->query($sSelect);
         $mResult = $mResult->fetch_all(1);
-        $this->_disconnect();
         if($mResult === false){
             return array();
         }else if(is_array($mResult)){
@@ -47,9 +45,7 @@ class dbConnector
 
     public function execute(string $sQuery): bool
     {
-        $this->_connect();
         $bReturn = $this->_oMysqli->query($sQuery);
-        $this->_disconnect();
         return $bReturn;
     }
 
